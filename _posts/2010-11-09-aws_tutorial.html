@@ -1,0 +1,155 @@
+---
+layout: post
+title: ! '[转] Amazon AWS 漫游指南'
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>转载自<a href="http://yinhm.appspot.com/2010/10/amazon-ec2-micro-instance-and-tunnel-guide" target="_blank">http://yinhm.appspot.com/2010/10/amazon-ec2-micro-instance-and-tunnel-guide</a></p>
+<div class="body">
+<h2>本文适用对象</h2>
+<ul>
+<li>您希望建立自己的英特网漫游隧道</li>
+<li>您有一张可以刷外币的信用卡，比如VISA。手机。</li>
+<li>您有基本的英文阅读技能</li>
+</ul>
+<h2>开始前需要注意</h2>
+<ul>
+<li>本文作者不对任何因本文造成的费用负责；</li>
+<li>Amazon包含750小时的free tiers活动从2010年11月1日开始，10月20日后注册的新用户 都可以享受此项服务；</li>
+<li>Free tires包含10GB EBS，30GB带宽（SSH proxy的话，实际上只有15GB），超出部分仍然需要付费；</li>
+<li>本文作者不熟悉Amazon EC2等服务，部分描述或理解可能有差错。</li>
+</ul>
+<h2>注册Amazon AWS账户</h2>
+<h3>注册Amazon账户</h3>
+<p>启动浏览器，访问 <a href="http://aws.amazon.com/">http://aws.amazon.com/</a> ，点击"Sign Up Now"：<br /> <img src="http://yinhm.appspot.com/static/ec2/step_1.png" alt="" /></p>
+<p>转入amazon账户登陆页面，如果您已经是amazon的用户，可以直接登陆，本文假设您还没 有amazon账户，注册新用户：<br /> <img src="http://yinhm.appspot.com/static/ec2/step_2.png" alt="" /></p>
+<ol>
+<li>输入email地址</li>
+<li>选中"I am a new user.</li>
+<li>点击"Sign in using secure server"</li>
+</ol>
+<p>转入新用户注册页面：<br /> <img src="http://yinhm.appspot.com/static/ec2/step_3.png" alt="" /></p>
+<ol>
+<li>姓名</li>
+<li>email地址</li>
+<li>重复email地址</li>
+<li>账户密码</li>
+<li>重复密码</li>
+<li>点击"Create account"</li>
+</ol>
+<p>转入联系信息页面：<br /> <img src="http://yinhm.appspot.com/static/ec2/step_4.png" alt="" width="800" height="600" /></p>
+<ol>
+<li>联系地址：街道，公司，必填</li>
+<li>联系地址：几单元门牌号等，按需填写</li>
+<li>城市</li>
+<li>省份</li>
+<li>邮编</li>
+<li>国家：china</li>
+<li>电话号码：直接填写，无需 +86</li>
+<li>协议</li>
+<li>验证码</li>
+</ol>
+<h3>注册AWS账户</h3>
+<p>联系信息提交成功后转入AWS登陆页面，输入email，密码，登陆后，转到AWS联系信息页面，虽 然之前注册Amazon账户已经填写过联系信息，注册Amazon AWS账户还是需要充填一遍，按 照原先输入的信息表单会自动补全。</p>
+<p>联系信息提交成功后，AWS账户注册步骤完成了。Amazon AWS会email通知告诉你接下来 如何如何。</p>
+<h2>填写信用卡信息</h2>
+<p>Amazon EC2一般的付费模式是On Demand按需付费，不用不付费。在使用之 前需要关联信用卡信息到您的AWS账户。</p>
+<p>点击上面邮件中的account链接，或直接访问：<a href="http://aws.amazon.com/account">http://aws.amazon.com/account</a>，点击 <strong>Payment Method</strong> ，登陆后转到支付方式页面，输入你的信用卡信息 <strong>Continue</strong>。</p>
+<p>继续转到账单地址页面，选择注册AWS时提供的地址 <strong>Continue</strong></p>
+<p>信用卡验证会刷掉1美金（我的理解是预付费，验证不会真的扣钱，这点我并未去证实），如果没有成功会收到邮件通知更正信用卡信 息，<strong>Account Activity</strong>页面也会提示你更新信用卡信息或者用已有信息 重新验证。</p>
+<h2>开通 AWS EC2 等服务</h2>
+<p>开通AWS相关服务需要登陆AWS管理后台console。访问 <a href="https://aws.amazon.com/console">https://aws.amazon.com/console</a> ，点击 <strong>Sign in to the AWS Console</strong>，登陆后转到AWS后台。</p>
+<p>默认登陆console后转到 Amazon S3 管理页面，点击 Amazon EC2 转到 EC2 管理页面，点 击 <strong>Sign Up For Amazon EC2</strong></p>
+<p>转到电话验证页面<br /> <img src="http://yinhm.appspot.com/static/ec2/aws_console_ec2_id_verification.png" alt="" /></p>
+<ol>
+<li>选择China</li>
+<li>填写手机号码，无需+86</li>
+<li>点击 "Call Me Now"</li>
+</ol>
+<p>点击后，此页面转到第二步，显示 PIN 验证码。</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_pin.png" alt="" /></p>
+<p>同时接收到亚马逊电话验证，输入您浏览器页面中的PIN码，信息验证完成。 转到第三步，点击<strong>Continue</strong>。</p>
+<p>转到完成启用服务确认页面，这个页面展示不同机房不同服务的收费情况，并非配置页 面，直接<strong>Complete Sign Up</strong> <img src="http://yinhm.appspot.com/static/ec2/aws_subs.png" alt="" /></p>
+<p>系统提示正在启用订阅，订阅后会发送邮件到你的邮箱。</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_subs_activating.png" alt="" /></p>
+<p>至此EC2服务已经开通。可以进入console跑instance啦！</p>
+<h3>启动实例</h3>
+<p>打开 <a href="https://console.aws.amazon.com/ec2/home">https://console.aws.amazon.com/ec2/home</a> 进入 EC2 console： <img src="http://yinhm.appspot.com/static/ec2/aws_console_ec2.png" alt="" /></p>
+<ol>
+<li>Amazon S3: S3存储服务，可不用</li>
+<li>Amazon EC2: 类似传统的VPS服务，可以在这里启动Instance，增加EBS硬盘</li>
+<li>Region: 四个可选区域，一般来讲国内连西海岸加州机房较快，如果对国内提供web服 务，也可以考虑新加坡机房，新加坡机房价钱要贵一些。</li>
+<li>Instances: 所有实例（VPS）</li>
+<li>AMIs: 所有AMIs，可以看成是不用安装的操作系统，选择一个启动即得到一个 Instance。</li>
+<li>Volumes：EBS硬盘，EC2默认不带存储，虽然可以通过存储在S3的AMI启动，但当你关 闭或重启Instance后，所有数据都会消失。而通过存储在EBS的AMI启动则不会有这个问题。 所有数据变更保存到EBS中。您也可以添加额外的EBS挂在到某个Instance。</li>
+<li>Snapshots: 增量备份的系统快照。</li>
+<li>Elastic IP: EC2的Instance是变化的，如果你需要固定的IP，可以在这里设置，不过 需要注意，如果你分配了固定IP但是没有挂载到任何Instance上，你会被Amazon惩罚性收 费。</li>
+<li>Launch Instance: 点击启动新的Instance实例。</li>
+</ol>
+<p>点击 <strong>Launch Instance</strong>， 打开实例向导窗口： <img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz1.png" alt="" /> 这里我们用的是默认的第一个 AMI, <strong>Basic 32-bit Amazon Linux AMI 1.0</strong>，大致解释一下：</p>
+<ul>
+<li>Amazon Linux是Amazon基于fedora为EC2定制的AMI，默认禁止root ssh密码方式登陆， 去除不需要的服务等，默认配置更加安全。 安全。</li>
+<li>自带 Amazon 工具包。</li>
+<li>Amazon每个Region都为Amazon Linux提供了软件仓库，更新软件不造成带宽费用。</li>
+<li>micro instance更适合跑32-bit linux。</li>
+<li>EBS boot，默认配合10GB的EBS。</li>
+<li>使用此instance没有额外费用。</li>
+<li>选择Windows instance，需按使用支付Windows授权费用。</li>
+<li>这里没有选择ubuntu的原因是因为我发现Ubuntu的AMI默认是15GB的EBS，而free tier 只提供了10GB的EBS硬盘。</li>
+</ul>
+<p>点击<strong>Select</strong>，进入向导第二步：</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz2.png" alt="" /></p>
+<ol>
+<li>实例数，默认为1，free tiers包含每月750小时的micro instance，如果不间断运行 的话，正好够跑一个instance。</li>
+<li>可用区域，这里用了默认的，无特别喜好。</li>
+<li>实例类型，必须选择Micro，除非你不准备使用免费的micro instance。</li>
+<li>启动实例，对应的另外一个选项是"Request Spot Instances"，类似竞价方 式在空闲的机器上跑Instance，这个用默认的。</li>
+</ol>
+<p>点击<strong>Continue</strong>转到高级实例选项设定，这里全部默认。</p>
+<p>点击<strong>Continue</strong>转到Tag设定页面，可以不设定直接跳过。</p>
+<p>点击<strong>Continue</strong>进入"Create Key Pair"：</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz3.png" alt="" /></p>
+<ol>
+<li>指定一个密钥名称，如: fookey</li>
+<li>点击生成并下载密钥，<strong>这个密钥需要妥善保存，有了这个密钥，可以随时打 开（登陆）您跑在amazon aws上的机器</strong>。</li>
+</ol>
+<p>点击<strong>Continue</strong>进入"CONFIGURE FIREWARE"： <img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz4.png" alt="" /></p>
+<p>配置防火墙页面，这个设置安全组别为"Web", 并添加了"http", "https"，允许此台服务 器提供web服务。</p>
+<p>点击<strong>Continue</strong>进入"Review"：</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz5.png" alt="" /></p>
+<p>注意一下，Instance Type为 <strong>Micro (t1.micro)</strong></p>
+<p>点击"Launch"启动Instance。基于EBS的AMI启动大约需要1分钟。</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_ec2_instance_wiz6.png" alt="" /></p>
+<p>点击<strong>View your instances on the Instances page</strong>察看Instance状态。</p>
+<p>您应该已经看到有一个 t1.micro status为<strong>Running</strong>，至此您的micro intance已经启动，意味这您有一台可以ssh登陆的linux服务器啦。</p>
+<h2>用它来做什么</h2>
+<ul>
+<li>用来做web服务器，跑php, python, ruby网站</li>
+<li>用来跑SSH proxy, VPN</li>
+<li>更多...</li>
+</ul>
+<p>SSH proxy在Linux下很简单，一条命令即可：</p>
+<pre><code><br />$mv ~/Downloads/fookey.perm ~/.ssh/<br />$chmod 400 ~/.ssh/fookey.perm<br />$ssh -i ~/.ssh/ec2.pem ec2-user@YOUR_AMAZON_PUBLIC_DNS -f -N -D 10003<br /></code></pre>
+<ul>
+<li>系统只允许通过key密钥登陆</li>
+<li>我们安装的AMI，默认登陆用户为 ec2-user</li>
+<li>用你的Public DNS代替 YOUR_AMAZON_PUBLIC_DNS</li>
+<li>跑了一个ssh forward监听本地10003端口</li>
+</ul>
+<p>Public DNS可以在Instances详细信息中找到，</p>
+<p><img src="http://yinhm.appspot.com/static/ec2/aws_ec2_public_dns.png" alt="" /></p>
+<h3>Windows用户</h3>
+<p>Windows默认没有ssh客户端，需要下载putty。putty默认不支持Amazon ec2的key，需要做 转换，具体过程请<a href="http://docs.amazonwebservices.com/AWSEC2/2010-08-31/GettingStartedGuide/index.html?ConnectToInstanceLinux.html#d0e512">参考官方文档</a>。</p>
+<p>做tunnel的话还需要在putty中设定tunnel选项，如端口，动态，自动等。具体还请大家自 行测试。或者看这里： <a href="http://digitalpbk.blogspot.com/2009/05/ssh-proxy-windows-linux-orkut-bypass.html">SSH Tunneling Proxy using Putty on Windows and Linux</a></p>
+<h2>进一步学习Linux</h2>
+<ul>
+<li>一本linux书籍</li>
+<li>看看 fedora文档：http://fedoraproject.org/</li>
+<li>去国内的社区寻求帮助，如linuxsir</li>
+</ul>
+</div>

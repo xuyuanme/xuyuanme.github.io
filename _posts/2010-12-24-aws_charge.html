@@ -1,0 +1,14 @@
+---
+layout: post
+title: Amazon AWS试用后记
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>上次在转了一篇关于Amazon AWS免费试用的文章后，自己也身体力行地尝试了一遍。当时没有注意太多，试用完之后就把AWS上的Instance关掉了。但杯具的是，这两个月连续的收到亚马逊的账单，每个月7刀左右：<br /> <img src="http://img.xuyuan.me/photos/blog/aws_charge.JPG" alt="" /></p>
+<p>&nbsp;</p>
+<p>仔细查看了一下，发现大多数费用都发生在&rdquo;EBS Volumns&rdquo;。这个服务的全称是&rdquo;Amazon Elastic Block Store&rdquo;，提供离线存储服务。问题是当时在用Free Tier的时候完全没有注意到这个会随着Micro Instance的启动而一并运行，并且在停掉Instance之后也还一直在计时计费。没办法，只好发信给亚马逊看看能不能解释清楚。看来免费的午餐吃起来也得格外小心啊。。<br /> <img src="http://img.xuyuan.me/photos/blog/aws_ebs.JPG" alt="" width="700" height="400" /></p>

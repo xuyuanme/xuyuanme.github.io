@@ -1,0 +1,38 @@
+---
+layout: post
+title: ! '[转] 使用Amazon EC2搭建自己的VPN服务器'
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>之前转过一篇关于开通设置Amazon AWS的<a href="../2010/11/9/aws_tutorial.html" target="_blank">教程</a>。Amazon的免费AWS服务有一个非常不错的用处就是搭建自己的VPN服务器，这样PC/Android/iPhone上网全都一并解决了。  这里还是转一篇来自@yinhm的EC2一键安装VPN的教程，原文地址: <a href="http://yinhm.appspot.com/2010/11/amazon-ec2-tunnel-guide-part-three-vpn" target="_blank">http://yinhm.appspot.com/2010/11/amazon-ec2-tunnel-guide-part-three-vpn</a></p>
+<p><span style="font-family: helvetica, arial, clean, sans-serif; line-height: normal; font-size: 16px;"> </span></p>
+<h2 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 15pt; margin-right: 0px; margin-bottom: 10pt; margin-left: 0px; font-size: 18pt;">为什么PPTP</h2>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">VPN常见的有：IPSec, PPTP, L2TP, OpenVPN。OpenVPN运行在用户空间，这需要用户端安装客户端软件，对手机用户来说并不友好。IPSec, L2TP over IPSec则过于繁琐。PPTP的话，从协议上来讲，<a style="color: #0000cc; text-decoration: none;" href="http://poptop.sourceforge.net/dox/protocol-security.phtml">不够安全</a>，但由于其易用并且安全风险在可以接受的范围，这里选择了 PPTP。</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;"><strong>警告</strong>：如果您对安全要求非常高，请使用IPSec或者OpenVPN代替。</p>
+<h2 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 15pt; margin-right: 0px; margin-bottom: 10pt; margin-left: 0px; font-size: 18pt;">安装配置PPTP</h2>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">我在DiaHosting提供的<a style="color: #0000cc; text-decoration: none;" href="http://blog.diahosting.com/linux-tutorial/pptpd/">PPTPD一键安装脚本</a>基础上定制了 Amazon AWS EC2的<a style="color: #0000cc; text-decoration: none;" href="https://gist.github.com/raw/666241/e8f3030a9e7066b8deb0a3d9ec761360e2d94227/pptpd.sh">pptpd安装配置脚本</a>。</p>
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 0px; margin-right: 0px; margin-bottom: 8pt; margin-left: 0px; font-size: 15pt;">系统要求</h3>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">需要您的系统为 Amazon Linux AMI。</p>
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 0px; margin-right: 0px; margin-bottom: 8pt; margin-left: 0px; font-size: 15pt;">安装</h3>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">登陆您的EC2 instance，如果您用使用Tunnier并且按照前文登陆时默认关闭"Open Terminal"的话，需要在Login后，点击左侧<strong>Open New Terminal Console</strong>进入EC2 instance终端。</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">进入EC2系统终端后，输入下面的代码：</p>
+<pre style="font-family: monospace; color: #005500; margin-top: 17pt; margin-bottom: 17pt; margin-left: 17pt; margin-right: 0px; padding-left: 15pt; border-left-width: 1px; border-left-style: solid; border-left-color: #dddddd; line-height: 16pt; overflow-x: auto; overflow-y: auto;"><code style="font-family: monospace; color: #005500;">wget https://gist.github.com/raw/666241/e8f3030a9e7066b8deb0a3d9ec761360e2d94227/pptpd.sh
+sudo sh pptpd.sh
+</code></pre>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">安装配置完成后会高亮提示vpn用户名和密码。</p>
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 0px; margin-right: 0px; margin-bottom: 8pt; margin-left: 0px; font-size: 15pt;">VPN用户管理</h3>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">增加用户，直接编辑 /etc/ppp/chap-secrets 文件，按照相同格式添加用户名和密码即可。</p>
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 0px; margin-right: 0px; margin-bottom: 8pt; margin-left: 0px; font-size: 15pt;">防火墙</h3>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">如果您使用的不是默认的<strong>Security Group</strong>，比如按照<a style="color: #0000cc; text-decoration: none;" href="http://yinhm.appspot.com/2010/10/amazon-ec2-micro-instance-and-tunnel-guide">前文</a>设置的"Security Group"，那么还需要调整防火墙规则。</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">PPTP默认跑1723端口，<span style="text-decoration: line-through;">我设置了没有成功，所以这里我打开了所有的端口</span><strong>只需第一行规则即可</strong>，见图：</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;"><img style="display: block; margin-top: 10px; margin-bottom: 10px; max-width: 700px; border: 0px initial initial;" src="http://lh3.ggpht.com/3XSYr8H3dxoRhFB82ry7DRGdWQfWbq0W_XVWaCQ1YfGleNErWa8woDKAct_1iysy889mXk4ZR3fLYw=s640" alt="" /></p>
+<h2 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 15pt; margin-right: 0px; margin-bottom: 10pt; margin-left: 0px; font-size: 18pt;">客户端连接</h2>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">客户端使用PPTP协议连接您的EC2服务器，服务器地址为您的Public DNS（参见前文），使用安装完成提示您的用户名密码即可连接。</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">需要注意，Public DNS在EC2 instance重启后会变更，您可以通过动态域名服务或者设置固定IP来解决。其实还有更简单的办法，对于普通用户，不妨不重启EC2 instance，linux系统稳定跑上一年没问题，一年后都收费了。如果你讨厌冗长的Public DNS，不妨ping一下得到您的IP，其实就是Public DNS中间的一串数字。</p>
+<p style="line-height: 18pt; margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 1em;">如果您希望长时间运行不受动态IP地址问题的影响，那么不妨设置一个固定IP。</p>
+<p>&nbsp;</p>

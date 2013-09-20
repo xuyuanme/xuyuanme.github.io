@@ -1,0 +1,29 @@
+---
+layout: post
+title: Troubleshooting of install DataStage Server 7.5 on Windows Server 2003
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p><strong>1. Error Msg:</strong></p>
+<div>&nbsp;</div>
+<div>##I TFCP 000008 15:53:21(004) &lt;transform&gt; Error when checking  composite operator: cxx<span>&nbsp; </span>-O<span>&nbsp;&nbsp; </span>-IC:/Ascential/DataStage/PXEngine/include  -W/TP -W/EHa -DAPT_USE_ANSI_IOSTREAMS -c sourcefilename.C -o  outputname.o</div>
+<div>&nbsp;</div>
+<div><strong>Solution:</strong> There's no C++ compiler installed on the  Windows&nbsp;server. The Transformer Stage in DataStage 7.5 needs Visual  Studio 2003 C++ compiler. If you don't&nbsp;have Visual Studio 2003,&nbsp;Visual  C++ Toolkit 2003&nbsp;will also work.&nbsp;It&nbsp;is a free version of the same C++  compiler shipped with Visual Studio .NET 2003 without the IDE, though it  is no longer available and now superseded by the Express Editions.  After installing the compiler, remember to config the Windows system  environment (Path, Include, Lib). The environment value should be  modified before DataStage Server is installed.</div>
+<div>&nbsp;</div>
+<div><strong>2. Error Msg:</strong></div>
+<div>&nbsp;</div>
+<div>##W TBLD 000000 15:53:21(003) &lt;main_program&gt; Error when  checking composite operator: Output from subprocess: cxx: file  'C:/PROGRA~1/MKSTOO~1/etc/cxx.ccg': The system cannot find the file  specified.</div>
+<div>&nbsp;</div>
+<div><strong>Solution: </strong>Copy cxx.ccg file from C:\Program  Files\MKS Toolkit\etc\nutccg\ to C:\Program Files\MKS Toolkit\etc\</div>
+<div>&nbsp;</div>
+<div><strong>3. Error Msg:</strong></div>
+<div>&nbsp;</div>
+<div>##I TBLD 000000 10:52:58(007) &lt;main_program&gt; Error when  checking composite operator: Output from subprocess: LINK : fatal error  LNK1181: cannot open input file 'User32.lib'</div>
+<div>&nbsp;</div>
+<div><strong>Solution: </strong>Windows Platform SDK should  be&nbsp;installed. The Windows system environment should also be updated.</div>
+<p>&nbsp;</p>

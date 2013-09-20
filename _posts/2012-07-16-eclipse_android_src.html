@@ -1,0 +1,22 @@
+---
+layout: post
+title: Eclipse IDE环境查看Android SDK源码
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>Android SDK Manager下载的android.jar包默认不包括源码，这给在不同Android版本调试开发程序带来一些不便。解决方法如下：</p>
+<p>1. 下载源码(以Ubuntu为例)：</p>
+<p># clone git source<br /> mkdir android_src<br /> git clone https://android.googlesource.com/platform/frameworks/base ./android_src</p>
+<p># check tag version<br /> git tag -l</p>
+<p># checkout code<br /> git checkout android-2.2_r1.2</p>
+<p># pack the source code<br /> touch android-2.2_r1.2-src.jar<br /> find -name '*.java' -exec jar uf android-2.2_r1.2-src.jar -C . {} \;</p>
+<p>2. 拷贝源码包android-2.2_r1.2-src.jar到Android SDK相应的版本目录下，例如：</p>
+<p>\android-sdk\platforms\android-2.2_r02-windows\sources</p>
+<p>可以执行jar xf android-2.2_r1.2-src.jar解压，或者Windows下可以用winrar等工具解压jar包文件到sources目录</p>
+<p>3. 重启Eclipse, 应该可以查看和debug源文件了。或者可以显式的给android.jar包指定java source路径，例如：C:/Program Files/Android/android-sdk/platforms/android-2.2_r02-windows/sources</p>
+<p>参考：<a href="http://en.newinstance.it/2010/05/17/attaching-sources-to-androidjar-in-eclipse/" target="_blank">http://en.newinstance.it/2010/05/17/attaching-sources-to-androidjar-in-eclipse/</a></p>

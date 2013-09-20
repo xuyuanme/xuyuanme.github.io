@@ -1,0 +1,20 @@
+---
+layout: post
+title: 一键脚本搭建基于Amazon EC2的免费Google ghs反向代理
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>相信很多试图把自己的域名和Google Apps绑定的同学都有遇到ghs被墙的烦恼，也曾到处寻找可用的ghs代理。曾经有一段时间一直在用<a href="http://www.you8g.com/" target="_blank">you8g</a>提供的ghs反向代理，不过不久前这个站点ms挂了。既然Amazon EC2提供了免费的Linux主机，那么干脆就在上面自己搭一个Nginx的反向代理用。顺手做了个一键安装并配置ghs反向代理的脚本，有需要的同学可以用来搭建自己的Nginx代理。如果没有申请过Amazon EC2, 可以参考此前的文章：<a href="../2010/11/9/aws_tutorial.html" target="_blank">Amazon AWS 漫游指南</a></p>
+<p>AWS EC2搭建Nginx作为Google ghs反向代理的具体步骤如下：</p>
+<p>1. 为域名增加一条A记录，把ghs指向你的EC2 Ip (即AWS给出的Public DNS的中间一串数字).</p>
+<p>2. 将需要指向ghs.google.com的域名cname指向ghs.your_domain_name</p>
+<p>3. ssh登录EC2 Linux，执行以下命令：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">wget https://gist.github.com/raw/844836/ec6cfc93ae6c8330c2d1aa2c8b3e5ed45af61b60/nginx.sh
+# 此处替换example.com为你自己的域名
+sudo sh nginx.sh example.com</pre>
+<p>打开EC2 security group中的相应端口，如果安装过程一切正常，域名的ghs反向代理就应该可以工作了。脚本在AWS EC2 Linux 32bit中测试通过。</p>

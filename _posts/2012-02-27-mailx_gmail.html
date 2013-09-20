@@ -1,0 +1,50 @@
+---
+layout: post
+title: Linux配置使用命令行(mailx)收发Gmail邮件
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>项目使用Amazon EC2作为服务器，在测试的时候发现邮件不能被正常发出去，网上查了下貌似Amazon的服务器为了防止被当作发垃圾邮件的工具，对邮件发送有限制。Amazon提供了一个Simple Mail Service可以与EC2集成在一起使用，不过对于Gmail的用户，经过简单的设置可以直接让mailx命令通过Gmail收发邮件。以下的教程基于<a href="http://klenwell.com/is/UbuntuCommandLineGmail" target="_blank">http://klenwell.com/is/UbuntuCommandLineGmail</a>.经过测试对邮件服务器托管在Google Apps的自有域名也同样适用。教程是基于Ubuntu写的，但经过简单修改应该同样适用于其他UNIX/Linux系统。</p>
+<p>1. 安装程序包：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ sudo apt-get install msmtp
+$ sudo apt-get install mailx</pre>
+<p>并查看/usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt证书文件是否已经存在，如果没有可以从以下地址下载：<a href="http://packages.ubuntu.com/en/source/lucid/ca-certificates" target="_blank">http://packages.ubuntu.com/en/source/lucid/ca-certificates</a></p>
+<p>2. 修改msmtp配置文件：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ gedit ~/.msmtprc</pre>
+<p>拷贝以下内容，并替换你自己的用户名密码：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; "># config options: http://msmtp.sourceforge.net/doc/msmtp.html#A-user-configuration-file
+defaults
+logfile /tmp/msmtp.log
+
+# gmail account
+account gmail
+auth on
+host smtp.gmail.com
+port 587
+user YOURNAME@gmail.com
+password YOURPASSWORD
+from YOURNAME@gmail.com
+tls on
+tls_trust_file /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+
+# set default account to use (not necessary with single account)
+account default : gmail</pre>
+<p>修改文件访问权限：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ chmod 600 ~/.msmtprc</pre>
+<p>3. 修改mailx配置文件：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ gedit ~/.mailrc</pre>
+<p>拷贝以下内容，并替换你自己的用户名：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; "># set smtp for mailx
+
+# gmail account (default)
+# $ mailx -s "subject line" -a /path/attachment recipient@email.com &lt; /path/body.txt set from="YOURNAME@gmail.com (YOURNAME)" set sendmail="/usr/bin/msmtp" set message-sendmail-extra-arguments="-a gmail"</pre>
+<p>4. 用以下命令可以测试：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ echo -e "testing email from the command line" &gt; /tmp/test_email
+$ mailx -s "mailx gmail test" YOURNAME@gmail.com &lt; /tmp/test_email</pre>
+<p>检查目标邮箱或者log文件：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">$ tail /tmp/msmtp.log</pre>

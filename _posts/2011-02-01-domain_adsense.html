@@ -1,0 +1,90 @@
+---
+layout: post
+title: 怎样利用你的闲置域名展示Google Adsense广告
+categories:
+- 技术
+- 杂谈
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>不知道大家在访问一些尚未启用的域名时有没有遇到过下面这样的广告页面：</p>
+<p><img src="https://www.google.com/adsense/static/en_US/images/afd_example.png" alt="" /></p>
+<p>有没有想过将自己的闲置域名也设计成类似的广告页？做一个网页然后插入Google Adsense的代码？其实完全不用这么麻烦，原来Google Adsense已经提供了很便利的方法，只需要修改自己域名的DNS设置就可以。实际上，你并不需要一个完全闲置不用的域名，只要www子域名是空闲没有使用的。比如说，你可以将blog.example.com做为你的blog网址，而把暂不需要使用的www.example.com指向广告。以下是具体的方法：</p>
+<p>1. 在Google Adsense控制面板中选择"New hosted domain", 添加你的域名</p>
+<p>2. 按以下其中一种方法修改DNS设置：</p>
+<p>2a). 把域名的nameserver指向Google的DNS nameserver：</p>
+<p>&nbsp;&nbsp;&nbsp; * ns1.googleghs.com<br />
+&nbsp;&nbsp;&nbsp; * ns2.googleghs.com<br />
+&nbsp;&nbsp;&nbsp; * ns3.googleghs.com<br />
+&nbsp;&nbsp;&nbsp; * ns4.googleghs.com</p>
+<p>或者，如果你希望更精确的控制使用子域名，那么可以：</p>
+<p>2b). 修改别名(CNAME)和A记录如下：</p>
+<p>修改CNAME (此处pub-xxxxxxxxx指你的Adsense帐号的唯一ID)：</p>
+<table border="1" cellspacing="3" cellpadding="1">
+<tbody>
+<tr>
+<td width="33%"><strong>Host Name/Alias</strong></td>
+<td width="33%"><strong>Record Type</strong></td>
+<td width="33%"><strong>Value/Destination</strong></td>
+</tr>
+<tr>
+<td width="33%">www</td>
+<td width="33%">CNAME (alias)</td>
+<td width="33%"><strong>pub-xxxxxxxxx</strong>.afd.ghs.google.com</td>
+</tr>
+</tbody>
+</table>
+<p>修改A记录：</p>
+<table border="1" cellspacing="3" cellpadding="1">
+<tbody>
+<tr>
+<td width="33%"><strong>Host Name/Alias</strong></td>
+<td width="33%"><strong>Record Type</strong></td>
+<td width="33%"><strong>Value/Destination</strong></td>
+</tr>
+<tr>
+<td width="33%">@</td>
+<td width="33%">A (address)</td>
+<td width="33%">216.239.32.21</td>
+</tr>
+<tr>
+<td width="33%">@</td>
+<td width="33%">A (address)</td>
+<td width="33%">216.239.34.21</td>
+</tr>
+<tr>
+<td width="33%">@</td>
+<td width="33%">A (address)</td>
+<td width="33%">216.239.36.21</td>
+</tr>
+<tr>
+<td width="33%">@</td>
+<td width="33%">A (address)</td>
+<td width="33%">216.239.38.21</td>
+</tr>
+</tbody>
+</table>
+<p>只需要按照A或B方法中的一种修改域名配置，然后等待一段时间生效(大约几小时)，你的域名就会被自动指向Google的广告页。另外，这个页面所展示广告的样式、语言等等都可以登录Adsense账户修改。这个是我用自己的域名产生的结果：<a href="http://www.xuyuan.me" target="_blank">www.xuyuan.me</a> 感兴趣的同学可以自己动手试试看。</p>
+<p><strong>Updated 2011.02.04</strong>: 发现pub-xxxxxxxxx.afd.ghs.google.com也属被墙之列，为了让网页能在墙内正常访问，可以自己使用Nginx做一个反向代理，配置如下：</p>
+<pre class="brush: plain;fontsize: 100; first-line: 1; ">	upstream adghs {
+        server pub-xxxxxxxxx.afd.ghs.google.com;
+    }
+
+	server {
+        listen       80;
+        server_name  www.xuyuan.me;
+        access_log  /var/log/nginx/ghs.xuyuan.me.log;
+
+        location / {
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_pass http://adghs;
+            proxy_set_header  X-Real-IP  $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_redirect false;
+        }
+    }</pre>
+<p>这样&nbsp;<a href="http://www.xuyuan.me" target="_blank">www.xuyuan.me</a>&nbsp;的网页应该可以在墙内正常打开了。(题外话：至于运行Nginx的Server，可以利用Amazon的免费EC2服务，具体细节下文再述。)</p>

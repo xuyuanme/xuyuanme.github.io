@@ -1,0 +1,55 @@
+---
+layout: post
+title: Programming DataStage -- Plug in Java Program with Java Pack
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<div>DataStage provides a set of Java API for users to plug-in their own  program. Java Pack is a separate package in DataStage 7.5, user need to  install both server and client pack. Once installed, there will be two  more stage in the DataStage Designer: Java Client and Java Transformer.  Java Client stage is a passive stage, it can be used as a source stage,  target stage or lookup stage. The Java Transformer stage is an active  stage, which calls a Java application that transforms data from an input  link and writes the data to an output link in a job.</div>
+<div>&nbsp;</div>
+<div>Take a sample code from Java Pack document for example. The program  reads rows from an input link, converts column values to uppercase and  writes the results to an output link. Rows that contain an asterisk (*)  are sent to a Reject link:&nbsp;</div>
+<div>
+<pre class="brush: java;fontsize: 100; first-line: 1; ">package test;
+
+import com.ascentialsoftware.jds.Row;
+
+import com.ascentialsoftware.jds.Stage;
+
+public class UpperCase extends Stage {
+	public int process() {
+		Row inputRow = readRow();
+		if (inputRow == null) {
+			return OUTPUT_STATUS_END_OF_DATA;
+		}
+		boolean reject = false;
+		int columnCount = inputRow.getColumnCount();
+		Row outputRow = createOutputRow();
+		for (int columnNumber = 0; columnNumber &lt; columnCount; columnNumber++) {
+			String value = inputRow.getValueAsString(columnNumber);
+			if ((value == null) || (value.indexOf('*') &gt;= 0)) {
+				reject = true;
+				outputRow.setValueAsString(columnNumber, value);
+			}
+			else {
+				outputRow.setValueAsString(columnNumber, value.toUpperCase());
+			}
+		}
+		if (reject) {
+			rejectRow(outputRow);
+		}
+		else {
+			writeRow(outputRow);
+		}
+		return OUTPUT_STATUS_READY;
+	}
+}</pre>
+</div>
+<div>&nbsp;</div>
+<div>After the source code is completed, compile it into .class file:</div>
+<div><em>javac -classpath $APT_ORCHHOME/java/lib/tr4j.jar  test/UpperCase.java&nbsp;</em></div>
+<div>&nbsp;</div>
+<div>Then drag the Java Transformer stage into designer canvas, add a  row generator as input and a sequence file stage as output. Now open the  Java Transformer stage, in Stage --&gt; General tab, enter the  Transformer Class Name. In this case it's 'test.upperCase'. In Users'  Classpath field, enter the path where your java class and library lives.  The input and output of this Java Transformer stage should all be  varchar type columns. After everything is done, compile and run the DS  job. You'll see all strings are transformed into uppercase in the output  file.</div>

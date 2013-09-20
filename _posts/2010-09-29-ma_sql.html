@@ -1,0 +1,38 @@
+---
+layout: post
+title: 一个可以用来面试的问题：用SQL计算指数的移动平均线(日均线)
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p><strong>移动平均线(Moving Average)</strong> 百度百科定义：将某一时间段的收盘股价或收盘指数相加的总和，除以时间周期，即得到这一时间的平均线，如５日移动平均线，就是将近５日的收盘价相加除以5，得到的就是第一个5日平均线，再将第一个5日平均线乘以5减去第一日的收盘价加上第6日的收盘价，其总和除以5得到的就是第二个5日平均线，将计算得到的平均数画在坐标图上连成线，即是5日平均线。其他移动平均线的计算方法以此类推。</p>
+<p>A. 假设有一张Oracle数据库表存放历史指数信息：</p>
+<p><img src="file:///C:/TEMP/moz-screenshot-2.png" alt="" /></p>
+<pre class="brush: sql;fontsize: 100; first-line: 1; ">CREATE TABLE TRADE
+(
+  CODE      VARCHAR2(20) not null,
+  TRADE_DT  DATE not null,
+  VALUE     NUMBER
+);</pre>
+<p>B. 表中数据如下：</p>
+<pre class="brush: sql;fontsize: 100; first-line: 1; ">SELECT * FROM TRADE;</pre>
+<p><img src="http://img.xuyuan.me/photos/blog/trade1.JPG" alt="" /></p>
+<p>问题1：用SQL计算每个指数的N日均线</p>
+<p>问题2：用SQL计算每个指数的N日均线值在当日的排名</p>
+<p><strong>SQL Query (Oracle):</strong></p>
+<pre class="brush: sql;fontsize: 100; first-line: 1; ">SELECT trade_dt,
+       code,
+       value,
+       AVG_20D,
+       rank() over(PARTITION BY trade_dt ORDER BY AVG_20D desc) rank
+  FROM (SELECT trade_dt,
+               code,
+               value,
+               round(AVG(value) OVER(PARTITION BY code ORDER BY trade_dt asc ROWS 20 PRECEDING),4) AVG_20D
+          FROM TRADE)
+ ORDER BY trade_dt asc, rank asc;</pre>
+<p><img src="http://img.xuyuan.me/photos/blog/trade2.JPG" alt="" /></p>

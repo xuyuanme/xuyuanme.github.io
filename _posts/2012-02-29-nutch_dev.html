@@ -1,0 +1,115 @@
+---
+layout: post
+title: Nutch开发简介
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p><strong>1.	Nutch简介</strong><br /> Nutch 是 Apache 基金会的一个开源项目，它原本是开源文件索引框架 Lucene 项目的一个子项目，后来渐渐发展成长为一个独立的开源项目。它基于 Java 开发，基于 Lucene 框架，提供 Web 网页爬虫功能。另外一个特点在于，它提供了一种插件框架，使得其对各种网页内容的解析、各种数据的采集、查询、集群、过滤等功能能够方便的进行扩展，正是由于有此框架，使得 Nutch 的插件开发非常容易。<br /> <img src="http://dl.notegg.com/u/6614015/img/nutch-arch.jpg" alt="" width="299" height="450" /><br /> Nutch允许使用插件来进行media-type解析、Html分析、数据检索、查询和集群化处理。Nutch的的核心模块主要有三个：<br /> 1）Crawler。用来发现、抓取和获取web页面信息。<br /> 2）WebDB。用来存储已有的URL以及获取的网页内容。<br /> 3）Indexer。为已有的网站网页信息和相关链接建立基于关键词搜索的索引。</p>
+<p>其运行流程如下：<br /> 1) 将起始 URL 集合注入到 Nutch 系统之中。<br /> 2) 生成片段文件，其中包含了将要抓取的 URL 地址。<br /> 3) 根据URL地址在互联网上抓取相应的内容。<br /> 4) 解析所抓取到的网页，并分析其中的文本和数据。<br /> 5) 根据新抓取的网页中的URL集合来更新起始URL集合，并再次进行抓取。<br /> 6) 同时，对抓取到的网页内容建立索引，生成索引文件存放在系统之中。</p>
+<p><strong>2.	安装Nutch开发环境 (Windows)</strong></p>
+<p>1)	安装Java SDK, Eclipse, Ant, Cygwin<br /> 2)	下载Nutch源码，可根据需要选择不同的版本：<br /> <a href="http://archive.apache.org/dist/nutch/" target="_blank"> http://archive.apache.org/dist/nutch/</a><br /> 3)	解压Nutch, 并在主目录运行&rsquo;ant job&rsquo;进行编译<br /> 4)	在Eclipse中选择File--&gt;New--&gt;Project--&gt;Java--&gt;Java Project from Existing Ant Buildfile<br /> 5)	在Eclipse项目上设置Properties, 选择Java Build Path --&gt; Libraries --&gt; 右侧的Add External Class Folder, 然后添加Nutch程序的conf目录，并且在Order and Export 页中将conf目录的编译顺序调到最上层。<br /> 6)	修改$NUTCH_HOME/conf/nutch-site.xml或nutch-default.xml文件<br /> 将plugin.folders属性的值设为实际相对或绝对路径，比如../apache-nutch-1.1/build/plugins<br /> 其他一些设置可以参见http://wiki.apache.org/nutch/NutchTutorial<br /> 7)	在Eclipse生成的项目目录下新建名为urls的目录，然后放入文件名为Nutch.txt的文件，其内容是希望作为蜘蛛抓取起点的Seed URL, 比如http://nutch.apache.org. 注意，$NUTCH_HOME/conf/crawl-urlfilter.txt文件中的URL过滤规则需要与Seed URL相对应，以控制Nutch抓取的页面路径和数量<br /> 8)	运行Nutch<br /> 在Eclipse里选择Run--&gt;Run Configuration --&gt;New, 然后Main Class设为org.apache.nutch.crawl.Crawl, Program Arguments设为urls -dir crawl -depth 3 -topN 50, VM arguments设为-Dhadoop.log.dir=logs -Dhadoop.log.file=hadoop.log 然后运行</p>
+<p><strong>3.	查看Nutch抓取结果</strong><br /> Nutch抓取结果可以通过安装在Tomcat上的Search网页查看。在开发调试时，可以通过Luke程序查看Index结果。或者，也可以通过Nutch自带的命令行程序查看抓取的网页。下面介绍在Windows环境通过Cygwin运行Nutch命令行查看segments内原生网页的方法：<br /> 1)	在Windows环境变量中设置名为NUTCH_JAVA_HOME变量，值的格式为/cygdrive/c/Progra~1/Java/jdk1.7.0_01, 路径为实际JDK的安装目录<br /> 2)	在PATH环境变量中增加Nutch的路径，比如D:\Workspace\w8\apache-nutch-1.4-bin\runtime\local\bin<br /> 3)	运行命令：nutch readseg -dump d:/Workspace/w5/Nutch_1_1/crawl/segments/20120222160409 /cygdrive/d/Workspace/w8 其中-dump后的第一个参数是实际生成的segments地址，第二个参数是输出dump文件的路径<br /> 4)	打开生成的dump文件，可以看到segment里抓取的网页源码和其他信息</p>
+<p><strong>4.	开发Nutch插件</strong><br /> 1)	以下为一个简单的示例插件程序，其作用是基于IndexingFilter, 将url符合某些规则的抓取结果抛弃，不进行索引或显示在结果中：</p>
+<pre class="brush: java;fontsize: 100; first-line: 1; ">// Source: src/plugin/myplugins/src/java/com/mycompany/nutch/indexing/InvalidUrlIndexFilter.java
+package com.mycompany.nutch.indexing;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
+import org.apache.nutch.crawl.CrawlDatum;
+import org.apache.nutch.crawl.Inlinks;
+import org.apache.nutch.indexer.IndexingException;
+import org.apache.nutch.indexer.IndexingFilter;
+import org.apache.nutch.indexer.NutchDocument;
+import org.apache.nutch.parse.Parse;
+
+/**
+* This indexing filter removes "invalid" urls that have been crawled
+* (out of necessity, since they lead to valid pages), but need to be
+* removed from the index. The invalid urls contain the string
+* "archive" (for archive pages which contain full text and links to
+* individual blog pages), "label" (tag based search result page with
+* full text of blogs labelled with the tag, and links to the individual
+* blog pages), and "feeds" (for RSS/Atom feeds, which we don't care
+* about, since they are duplicates of our blog pages). We also don't
+* care about the urls that are not suffixed with a .html extension.
+* @author Sujit Pal
+* @version $Revision$
+*/
+public class InvalidUrlIndexFilter implements IndexingFilter {
+
+private static final Logger LOGGER =
+Logger.getLogger(InvalidUrlIndexFilter.class);
+
+private Configuration conf;
+
+public void addIndexBackendOptions(Configuration conf) {
+// NOOP
+return;
+}
+
+public NutchDocument filter(NutchDocument doc, Parse parse, Text url,
+CrawlDatum datum, Inlinks inlinks) throws IndexingException {
+if (url == null) {
+return null;
+}
+if (url.find("archive") &gt; -1 ||
+url.find("label") &gt; -1 ||
+url.find("feeds") &gt; -1) {
+// filter out if url contains "archive", "label" or "feeds"
+LOGGER.debug("Skipping URL: " + new String(url.getBytes()));
+return null;
+}
+if (url.find(".html") == -1) {
+// filter out if url does not have a .html extension
+LOGGER.debug("Skipping URL: " + new String(url.getBytes()));
+return null;
+}
+// otherwise, return the document
+return doc;
+}
+
+public Configuration getConf() {
+return conf;
+}
+
+public void setConf(Configuration conf) {
+this.conf = conf;
+}
+}</pre>
+<p>2)	创建名为plugin.xml的文件，用以描述插件本身，内容如下：</p>
+<pre class="brush: xml;fontsize: 100; first-line: 1; ">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plugin id="myplugins" name="My test plugins for Nutch"
+    version="0.0.1" provider-name="mycompany.com"&gt;
+
+   &lt;runtime&gt;
+     &lt;library name="myplugins.jar"&gt;
+       &lt;export name="*"/&gt;
+     &lt;/library&gt;
+   &lt;/runtime&gt;
+
+   &lt;extension id="com.mycompany.nutch.indexing.InvalidUrlIndexFilter"
+       name="Invalid URL Filter"
+       point="org.apache.nutch.indexer.IndexingFilter"&gt;
+     &lt;implementation id="myplugins-invalidurlfilter"
+         class="com.mycompany.nutch.indexing.InvalidUrlIndexFilter"/&gt;
+   &lt;/extension&gt;
+&lt;/plugin&gt;</pre>
+<p>3)	编译以上程序，并打包为jar文件，和上述plugin.xml文件一同置于$NUTCH_HOME/build/plugins/myplugins目录<br /> 4)	修改$NUTCH_HOME/conf/nutch-site.xml或nutch-default.xml文件中的plugin.includes属性节点，将插件名增加到其中，例如：</p>
+<pre class="brush: xml;fontsize: 100; first-line: 1; ">  &lt;property&gt;
+    &lt;name&gt;plugin.includes&lt;/name&gt;
+    &lt;value&gt;
+      myplugins|protocol-http|urlfilter-regex|parse-(text|html\
+      |js)|index-(basic|anchor)|query-(basic|site|url)|\
+      response-(json|xml)|summary-basic|scoring-opic\
+      |urlnormalizer-(pass|regex|basic)
+    &lt;/value&gt;
+  &lt;/property&gt;</pre>
+<p>5)	运行Nutch程序，一切正常的话，插件会被调用并过滤URL</p>
+<p><strong>5.	参考资料</strong></p>
+<p>http://wiki.apache.org/nutch/NutchTutorial<br /> http://wiki.apache.org/nutch/RunNutchInEclipse0.9<br /> http://wiki.apache.org/nutch/WritingPluginExample-0.9<br /> http://sujitpal.blogspot.com/2009/07/nutch-getting-my-feet-wet.html<br /> http://today.java.net/pub/a/today/2006/01/10/introduction-to-nutch-1.html#configuration-customization</p>

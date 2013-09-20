@@ -1,0 +1,24 @@
+---
+layout: post
+title: 使用wget下载数据文件
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>在数据处理过程中对于一些简单的文件传输可以通过wget进行下载，基本的用法很简单：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">wget $http_url</pre>
+<p>不过很多情况下可能会有更复杂的一些条件，这里例举其中两种：</p>
+<p>1. 公司网络访问外网需要通过代理</p>
+<p>解决方法：设定http_proxy环境变量，例如：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">export http_proxy=http://server:port</pre>
+<p>&nbsp;</p>
+<p>2. 所访问的网页需要进行登录</p>
+<p>解决方法：使用wget的cookie参数，例如：</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">wget --keep-session-cookies --save-cookies $cookie_file -O /dev/null --post-data="log=user&amp;pwd=password" $login_url
+
+wget --keep-session-cookies --save-cookies $cookie_file --load-cookies $cookie_file $http_url -O $output_file</pre>
+<p>其中，$cookie_file是用来存储cookie内容的文件名，而post-data<span style="font-family: 'Courier New', monospace; line-height: 18px; white-space: pre;">参数的值可以通过"<a href="https://addons.mozilla.org/en-US/firefox/addon/live-http-headers/" target="_blank">Live HTTP headers</a>"等工具查看。</span></p>

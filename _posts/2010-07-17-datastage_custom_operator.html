@@ -1,0 +1,38 @@
+---
+layout: post
+title: Programming DataStage -- Develop Custom Operator with C++ API in UNIX
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>
+<div>In DataStage, user can develop custom operator to implement special  data process request. There is a very good tutorial on IBM <a href="http://www-128.ibm.com/developerworks/edu/dm-dw-dm-0702chard-i.html">developerWorks</a> (require an IBM ID) about how to create the custom operator, but it's  specific on Windows platform. It's hard to find such instructions on  UNIX. So I'll write down some details here, which might be helpful for  the others. The following instructions are for Sun Solaris, other  systems like Redhat and AIX may need some little change on the compile  options.</div>
+<div>&nbsp;</div>
+<div>0. Load the DataStage environment</div>
+<div>Load the DS environment if necessary. For example, go to the  DataStage home directory and execute '. ./dsenv'</div>
+<div>&nbsp;</div>
+<div>1. C++ source file</div>
+<div>The MyHelloWorld sample code could be found on the <a href="http://www-128.ibm.com/developerworks/edu/dm-dw-dm-0702chard-i.html">IBM  website</a>, which takes one input stream and one output stream. It  takes a single column as input, an integer, this integer determines how  many times "Hello World!" is printed into one of columns in the output  stream. The output stream consists of two columns, a counter showing how  many times "Hello World!" was printed, and the printed result. To go  with the input and output streams, there is one option "uppercase." This  option determines if the text "Hello World!" is printed in uppercase or  not.</div>
+<div>&nbsp;</div>
+<div>2. Create static object</div>
+<div>Compile the code with following command (complier and the options  may vary depending on different systems):</div>
+<div><em>/auto/opt/Studio8/SUNWspro/bin/CC -dalign -PIC  -library=iostream -c -I$APT_ORCHHOME/include myhelloworld.c</em></div>
+<div>&nbsp;</div>
+<div>3. Create dynamic library</div>
+<div><em>/auto/opt/Studio8/SUNWspro/bin/CC -G -L$APT_ORCHHOME/lib  -lorchsun4 -lorchcoresun4 -lrwtool -lsocket -lnsl -ldl -laio -lposix4  myhelloworld.o -o myhelloworld.so</em></div>
+<div>&nbsp;</div>
+<div>4. Register <em>$APT_ORCHHOME/etc/operator.apt</em></div>
+<div>Add one more record in the file to mapping the operator:</div>
+<div><em>myhelloworld myhelloworld 1</em></div>
+<div>The first myhelloworld is the operator name, it should be identical  with the one defined inside the source code. The second myhelloworld is  the name the PXEngine is looking for in its PATH search. The 1 in the  third column indicates that this mapping is enabled.</div>
+<div>&nbsp;</div>
+<div>5. Create a custom stage</div>
+<div>Create a new Parallel Custom Stage in DataStage Designer, enter  'myhelloworld' in General/Operator tab. Fill other tabs and click OK.</div>
+<div>&nbsp;</div>
+<div>6. Create, Compile and Run the DS job</div>
+<div>Create a new Parallel job by dragging two sequential file operators  and the myhelloworld operator onto the canvas, then link them together.  Set the details, make sure the input and output names&nbsp;are the same with  the one in custom code. After that, compile and run the job. If all the  settings are right, you'll see the expected output.</div>
+</p>

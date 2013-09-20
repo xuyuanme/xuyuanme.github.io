@@ -1,0 +1,19 @@
+---
+layout: post
+title: 使用Dropbox同步Eclipse项目
+categories:
+- 技术
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>开发时难免有时会需要在几个不同的地点，比如公司和家里的PC，调试同一段代码。这时简单有效、避免人工干预的代码同步不仅可以节省时间，而且也可以帮助保持清晰一致的思维。对于一些小规模且没有使用在线代码托管的项目来说，<a href="https://www.dropbox.com/referrals/NTY2MTQwMTU5" target="_blank">Dropbox</a>是一个不错的同步选择。Eclipse项目结合使用Dropbox的方法十分简单，只要把workspace建在Dropbox文件夹里的任一个目录就可以。但这样做带来的一个问题是Dropbox会不断地把即时生成的编译文件(假设是Java程序)同步到服务器，这不仅会对机器性能带来一些影响，而且如此频繁的更新也没有必要，毕竟我们只需要保证在换到一个新地点开始工作时代码完成更新就行了。</p>
+<p>这里介绍一个方法可以把Eclipse产生的编译文件移到Dropbox目录之外，这样我们就可以只同步发生改变的源程序：</p>
+<p>1.打开项目属性页面，在默认输出目录点击"Browse"：<br /> <img src="http://img.xuyuan.me/photos/blog/eclipse_1.JPG" alt="" /></p>
+<p>2.选取项目的顶层目录，然后点击新建目录：<br /> （如果你想要使用的目录名比如"bin"已经存在，可以先将其删除）<br /> <img src="http://img.xuyuan.me/photos/blog/eclipse_2.JPG" alt="" /></p>
+<p>3.在"Advanced"模式下，勾选"Link to folder in the file system"，然后选择一个Dropbox之外的文件夹作为输出目录：<br /> <img src="http://img.xuyuan.me/photos/blog/eclipse_3.JPG" alt="" /></p>
+<p>另外需要注意的是，不同开发机器上的JDK安装目录以及Dropbox目录的绝对路径最好保持一致，不然对一些类库文件的引用可能出错。</p>
+<p>如果你还没有安装Dropbox，可以通过以下链接申请，这样我们都可以增加额外的免费空间：<br /> <a href="https://www.dropbox.com/referrals/NTY2MTQwMTU5" target="_blank">https://www.dropbox.com/referrals/NTY2MTQwMTU5</a></p>
+<p>如果你不能访问Dropbox,试着修改C:\WINDOWS\system32\drivers\etc目录下的host文件，增加一行"174.36.30.71    www.dropbox.com" (不含引号)。</p>
