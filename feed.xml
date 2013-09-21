@@ -1,0 +1,27 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Yuan's Blog</title>
+ <link href="http://blog.xuyuan.me/feed" rel="self"/>
+ <link href="http://blog.xuyuan.me"/>
+ <updated>{{ site.time | date_to_xmlschema }}</updated>
+ <id>http://blog.xuyuan.me</id>
+ <author>
+   <name>xuyuanme</name>
+   <email>xuyuanme@gmail.com</email>
+ </author>
+
+ {% for post in site.posts %}
+ <entry>
+   <title>{{ post.title }}</title>
+   <link href="http://blog.xuyuan.me{{ post.url }}"/>
+   <updated>{{ post.date | date_to_xmlschema }}</updated>
+   <id>http://blog.xuyuan.me{{ post.id }}</id>
+   <content type="html">{{ post.content | xml_escape }}</content>
+ </entry>
+ {% endfor %}
+ 
+</feed>
