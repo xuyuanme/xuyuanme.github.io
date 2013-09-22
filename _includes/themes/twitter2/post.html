@@ -2,8 +2,28 @@
   <div id="post-span" class="span10" style="margin-left: 10%;">
     <div class="content post">
       <h1 class="title">{{ page.title }}</h1>
+	  <div style="margin-bottom: 20px;">
+        <strong>{{ page.date | date_to_long_string }}</strong>
+      </div>
       {{ page.description }}
       {{ content }}
+	  
+  {% unless page.categories == empty %}
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      {% assign categories_list = page.categories %}
+      {% include JB/categories_list %}
+    </ul>
+  {% endunless %}  
+
+  {% unless page.tags == empty %}
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      {% assign tags_list = page.tags %}
+      {% include JB/tags_list %}
+    </ul>
+  {% endunless %} 
+	  
     {% if page.next %}
       <hr>
       <div style="text-align:center">
