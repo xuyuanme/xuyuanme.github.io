@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.head_title %}{{ page.head_title }} | {{ page.title }}{% else %}{{ page.title }}{% endif %}</title>
-    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    {% if page.description %}<meta name="description" content="{{ page.description | strip_html }}">{% endif %}
     <meta name="author" content="{{ site.author.name }}">
     <meta name="keywords" content="{{ site.title }},{{ site.author.name }},{{ page.title }}{% if page.category %},{{ page.category }}{% endif %}{% if page.tags %},{{ page.tags }}{% endif %}">
     <link href="http://feeds.feedburner.com/xuyuanblog" rel="alternate" title="Yuan's Blog" type="application/atom+xml" />
