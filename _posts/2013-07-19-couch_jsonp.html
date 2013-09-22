@@ -3,25 +3,27 @@ layout: post
 title: 设置CouchDB支持JSONP跨域请求
 categories:
 - 技术
-tags: []
+tags: [CouchDB,json]
 status: publish
 type: post
 published: true
 meta: {}
----
-<p><strong>问题：</strong><br />
+description: "<p><strong>问题：</strong><br>
 通过jQuery getJSON方法跨域访问CouchDB:</p>
-<pre class="brush: jscript;fontsize: 100; first-line: 1; ">var six_latest = poq.root + "poquotes/_design/poquotes/_view/by_year?&amp;limit="
-			+ poq.max_quotes + "&amp;descending=true&amp;callback=?";
-$.getJSON(six_latest, poq.handleMainQuotes);</pre>
-<p>Chrome console报错"Uncaught SyntaxError: Unexpected token :"，Firebug报错"invalid label"</p>
+<div class='highlight'><pre><code class='javascript'><span class='kd'> var</span> <span class='nx'>six_latest</span> <span class='o'>=</span> <span class='nx'>poq</span><span class='p'>.</span><span class='nx'>root</span> <span class='o'>+</span> <span class='s2'>\"poquotes/_design/poquotes/_view/by_year?&amp;limit=\"</span><br>
+<span class='o'>    +</span> <span class='nx'>poq</span><span class='p'>.</span><span class='nx'>max_quotes</span> <span class='o'>+</span> <span class='s2'>\"&amp;descending=true&amp;callback=?\"</span><span class='p'>;</span><br>
+<span class='nx'>$</span><span class='p'>.</span><span class='nx'>getJSON</span><span class='p'>(</span><span class='nx'>six_latest</span><span class='p'>,</span> <span class='nx'>poq</span><span class='p'>.</span><span class='nx'>handleMainQuotes</span><span class='p'>);</span>
+</code></pre></div>
+<p>Chrome console报错\"Uncaught SyntaxError: Unexpected token :\"，Firebug报错\"invalid label\"</p>"
+---
 <p><strong>原因：</strong><br />
 CouchDB默认按照Json格式返回，而jQuery在'callback=?'的JSONP请求模式下将结果按照script解析，因此无法解析返回结果</p>
 <p><strong>解决方法：</strong><br />
 在CouchDB的配置文件中设置'allow_jsonp = true' (Windows中ini文件位于CouchDB\etc\couchdb\local.ini)</p>
 <p><strong>附：</strong><br />
 allow_jsonp=false时返回Content-Type:text/plain，内容为：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; ">{"total_rows":2,"offset":0,"rows":[
+{% highlight json %}
+{"total_rows":2,"offset":0,"rows":[
 {"id":"99fd95b1bcfea3ca68013cba10003ccb","key":1915,"value":{"_id":"99fd95b1bcfea3ca68013cba10003ccb","_rev":"1-8c1b95f892379d6539d3a81a731fc9ec","type":"quote","author":"Robert Graves","text":"White flabbiness goes brown and lean,
 Dumpling arms are now brass bars,
 They&rsquo;ve learnt to suffer and live clean,
@@ -29,9 +31,11 @@ And to think below the stars.","work":{"title":"A Renascence","link":"http://www
 {"id":"99fd95b1bcfea3ca68013cba10001475","key":1915,"value":{"_id":"99fd95b1bcfea3ca68013cba10001475","_rev":"1-7fe040eb6d322a35a86d2f871b100ff0","type":"quote","author":"Thomas Hardy","text":"And as the smart ship grew
 In stature, grace, and hue
 In shadowy silent distance grew the Iceberg too.","work":{"title":"The Convergence Of The Twain","link":"http://www.poetryfoundation.org/poem/176678","year":1915}}}
-]}</pre>
+]}
+{% endhighlight %}
 <p>allow_jsonp=true时返回Content-Type:text/javascript，内容为：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; ">/* CouchDB */jQuery19100955071453936398_1374199468922({"total_rows":2,"offset":0,"rows":[
+{% highlight json %}
+/* CouchDB */jQuery19100955071453936398_1374199468922({"total_rows":2,"offset":0,"rows":[
 {"id":"99fd95b1bcfea3ca68013cba10003ccb","key":1915,"value":{"_id":"99fd95b1bcfea3ca68013cba10003ccb","_rev":"1-8c1b95f892379d6539d3a81a731fc9ec","type":"quote","author":"Robert Graves","text":"White flabbiness goes brown and lean,
 Dumpling arms are now brass bars,
 They&rsquo;ve learnt to suffer and live clean,
@@ -39,4 +43,5 @@ And to think below the stars.","work":{"title":"A Renascence","link":"http://www
 {"id":"99fd95b1bcfea3ca68013cba10001475","key":1915,"value":{"_id":"99fd95b1bcfea3ca68013cba10001475","_rev":"1-7fe040eb6d322a35a86d2f871b100ff0","type":"quote","author":"Thomas Hardy","text":"And as the smart ship grew
 In stature, grace, and hue
 In shadowy silent distance grew the Iceberg too.","work":{"title":"The Convergence Of The Twain","link":"http://www.poetryfoundation.org/poem/176678","year":1915}}}
-]});</pre>
+]});
+{% endhighlight %}
