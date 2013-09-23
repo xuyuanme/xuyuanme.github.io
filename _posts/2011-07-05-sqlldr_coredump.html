@@ -14,25 +14,31 @@ description: "<p>调试代码时在一个关于SQL*Loader的错误上折腾了�
 <p>SQL*Loader: Release 10.2.0.4.0 - Production on Tue Jul 5 01:20:09 2011<br /> Copyright (c) 1982, 2007, Oracle.&nbsp; All rights reserved.<br /> <span style=\"color: #ff0000;\">Segmentation Fault (core dumped)</span></p>"
 ---
 <p>其他类似的程序并没有发现这种错误。在进行了N种尝试后，发现问题存在于数据文件的文件名上：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; highlight: [2]; ">LOAD DATA
+{% highlight text %}
+LOAD DATA
 INFILE 0701.T0.csv
 APPEND INTO TABLE SAMPLE_TABLE
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 TRAILING NULLCOLS
 (
 COLUMN DEF ...
-)</pre>
+)
+{% endhighlight %}
 <p>经测试，只要控制文件中INFILE选项后跟的文件名以数字开头，就会发生"Segmentation Fault (core dumped)"的错误。（Oracle的Bug?）</p>
 <p><strong>解决方法：</strong></p>
 <p>方法1. 最简单的方法，避免数据文件名以数字开头</p>
 <p>方法2. 数据文件名加双引号：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; highlight: [2]; ">LOAD DATA
+{% highlight text %}
+LOAD DATA
 INFILE &ldquo;0701.T0.csv&rdquo;
 APPEND INTO TABLE SAMPLE_TABLE
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 TRAILING NULLCOLS
 (
 COLUMN DEF ...
-)</pre>
+)
+{% endhighlight %}
 <p>方法3. CTL文件中不使用INFILE选项，在命令行中用data选项代替：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; highlight: [1]; ">$&gt; sqlldr user_id/passwd@db_name control=control_file.ctl data=0701.T0.csv</pre>
+{% highlight text %}
+$&gt; sqlldr user_id/passwd@db_name control=control_file.ctl data=0701.T0.csv
+{% endhighlight %}
