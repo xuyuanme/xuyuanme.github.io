@@ -16,8 +16,7 @@ description: "<p><strong>1.	Nutch简介</strong><br /> Nutch 是 Apache 基金�
 <p>1)	安装Java SDK, Eclipse, Ant, Cygwin<br /> 2)	下载Nutch源码，可根据需要选择不同的版本：<br /> <a href="http://archive.apache.org/dist/nutch/" target="_blank"> http://archive.apache.org/dist/nutch/</a><br /> 3)	解压Nutch, 并在主目录运行&rsquo;ant job&rsquo;进行编译<br /> 4)	在Eclipse中选择File--&gt;New--&gt;Project--&gt;Java--&gt;Java Project from Existing Ant Buildfile<br /> 5)	在Eclipse项目上设置Properties, 选择Java Build Path --&gt; Libraries --&gt; 右侧的Add External Class Folder, 然后添加Nutch程序的conf目录，并且在Order and Export 页中将conf目录的编译顺序调到最上层。<br /> 6)	修改$NUTCH_HOME/conf/nutch-site.xml或nutch-default.xml文件<br /> 将plugin.folders属性的值设为实际相对或绝对路径，比如../apache-nutch-1.1/build/plugins<br /> 其他一些设置可以参见http://wiki.apache.org/nutch/NutchTutorial<br /> 7)	在Eclipse生成的项目目录下新建名为urls的目录，然后放入文件名为Nutch.txt的文件，其内容是希望作为蜘蛛抓取起点的Seed URL, 比如http://nutch.apache.org. 注意，$NUTCH_HOME/conf/crawl-urlfilter.txt文件中的URL过滤规则需要与Seed URL相对应，以控制Nutch抓取的页面路径和数量<br /> 8)	运行Nutch<br /> 在Eclipse里选择Run--&gt;Run Configuration --&gt;New, 然后Main Class设为org.apache.nutch.crawl.Crawl, Program Arguments设为urls -dir crawl -depth 3 -topN 50, VM arguments设为-Dhadoop.log.dir=logs -Dhadoop.log.file=hadoop.log 然后运行</p>
 <p><strong>3.	查看Nutch抓取结果</strong><br /> Nutch抓取结果可以通过安装在Tomcat上的Search网页查看。在开发调试时，可以通过Luke程序查看Index结果。或者，也可以通过Nutch自带的命令行程序查看抓取的网页。下面介绍在Windows环境通过Cygwin运行Nutch命令行查看segments内原生网页的方法：<br /> 1)	在Windows环境变量中设置名为NUTCH_JAVA_HOME变量，值的格式为/cygdrive/c/Progra~1/Java/jdk1.7.0_01, 路径为实际JDK的安装目录<br /> 2)	在PATH环境变量中增加Nutch的路径，比如D:\Workspace\w8\apache-nutch-1.4-bin\runtime\local\bin<br /> 3)	运行命令：nutch readseg -dump d:/Workspace/w5/Nutch_1_1/crawl/segments/20120222160409 /cygdrive/d/Workspace/w8 其中-dump后的第一个参数是实际生成的segments地址，第二个参数是输出dump文件的路径<br /> 4)	打开生成的dump文件，可以看到segment里抓取的网页源码和其他信息</p>
 <p><strong>4.	开发Nutch插件</strong><br /> 1)	以下为一个简单的示例插件程序，其作用是基于IndexingFilter, 将url符合某些规则的抓取结果抛弃，不进行索引或显示在结果中：</p>
-{% highlight java %}
-// Source: src/plugin/myplugins/src/java/com/mycompany/nutch/indexing/InvalidUrlIndexFilter.java
+<pre class="brush: java;fontsize: 100; first-line: 1; ">// Source: src/plugin/myplugins/src/java/com/mycompany/nutch/indexing/InvalidUrlIndexFilter.java
 package com.mycompany.nutch.indexing;
 
 import org.apache.hadoop.conf.Configuration;
@@ -83,11 +82,9 @@ return conf;
 public void setConf(Configuration conf) {
 this.conf = conf;
 }
-}
-{% endhighlight %}
+}</pre>
 <p>2)	创建名为plugin.xml的文件，用以描述插件本身，内容如下：</p>
-{% highlight xml %}
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<pre class="brush: xml;fontsize: 100; first-line: 1; ">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;plugin id="myplugins" name="My test plugins for Nutch"
     version="0.0.1" provider-name="mycompany.com"&gt;
 
@@ -103,11 +100,9 @@ this.conf = conf;
      &lt;implementation id="myplugins-invalidurlfilter"
          class="com.mycompany.nutch.indexing.InvalidUrlIndexFilter"/&gt;
    &lt;/extension&gt;
-&lt;/plugin&gt;
-{% endhighlight %}
+&lt;/plugin&gt;</pre>
 <p>3)	编译以上程序，并打包为jar文件，和上述plugin.xml文件一同置于$NUTCH_HOME/build/plugins/myplugins目录<br /> 4)	修改$NUTCH_HOME/conf/nutch-site.xml或nutch-default.xml文件中的plugin.includes属性节点，将插件名增加到其中，例如：</p>
-{% highlight xml %}
-  &lt;property&gt;
+<pre class="brush: xml;fontsize: 100; first-line: 1; ">  &lt;property&gt;
     &lt;name&gt;plugin.includes&lt;/name&gt;
     &lt;value&gt;
       myplugins|protocol-http|urlfilter-regex|parse-(text|html\
@@ -115,8 +110,7 @@ this.conf = conf;
       response-(json|xml)|summary-basic|scoring-opic\
       |urlnormalizer-(pass|regex|basic)
     &lt;/value&gt;
-  &lt;/property&gt;
-{% endhighlight %}
+  &lt;/property&gt;</pre>
 <p>5)	运行Nutch程序，一切正常的话，插件会被调用并过滤URL</p>
 <p><strong>5.	参考资料</strong></p>
 <p>http://wiki.apache.org/nutch/NutchTutorial<br /> http://wiki.apache.org/nutch/RunNutchInEclipse0.9<br /> http://wiki.apache.org/nutch/WritingPluginExample-0.9<br /> http://sujitpal.blogspot.com/2009/07/nutch-getting-my-feet-wet.html<br /> http://today.java.net/pub/a/today/2006/01/10/introduction-to-nutch-1.html#configuration-customization</p>
