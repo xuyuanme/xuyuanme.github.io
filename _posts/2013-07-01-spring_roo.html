@@ -3,14 +3,16 @@ layout: post
 title: 解决Spring Roo Demo中"security setup"的问题
 categories:
 - 技术
-tags: []
+tags: [Spring Roo]
 status: publish
 type: post
 published: true
 meta: {}
+description: "<p>Spring Roo的Pizza Shop教程(http://static.springsource.org/spring-roo/reference/html/beginning.html)中提到在Roo Shell使用\"security setup\"为应用程序设置Spring Security. 设置完成后在Web Server中运行报错</p>"
 ---
-<p>Spring Roo的Pizza Shop教程(http://static.springsource.org/spring-roo/reference/html/beginning.html)中提到在Roo Shell使用"security setup"为应用程序设置Spring Security. 设置完成后在Web Server中运行报错：</p>
-<pre class="brush: plain;fontsize: 100; first-line: 1; ">org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: Unable to locate Spring NamespaceHandler for XML schema namespace [http://www.springframework.org/schema/security]
-Offending resource: file [D:\projekty\diplomka_workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\e-library\WEB-INF\classes\META-INF\spring\applicationContext-security.xml]</pre>
+{% highlight text %}
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: Unable to locate Spring NamespaceHandler for XML schema namespace [http://www.springframework.org/schema/security]
+Offending resource: file [D:\projekty\diplomka_workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\e-library\WEB-INF\classes\META-INF\spring\applicationContext-security.xml]
+{% endhighlight %}
 <p>需要将Spring Security的jar包拷贝到Web应用程序的lib目录：\pizza\src\main\webapp\WEB-INF\lib</p>
 <p>再次编译运行正常</p>

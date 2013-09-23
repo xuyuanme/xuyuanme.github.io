@@ -3,13 +3,14 @@ layout: post
 title: Linux配置使用命令行(mailx)收发Gmail邮件
 categories:
 - 技术
-tags: []
+tags: [Linux]
 status: publish
 type: post
 published: true
 meta: {}
+description: "<p>项目使用Amazon EC2作为服务器，在测试的时候发现邮件不能被正常发出去，网上查了下貌似Amazon的服务器为了防止被当作发垃圾邮件的工具，对邮件发送有限制。Amazon提供了一个Simple Mail Service可以与EC2集成在一起使用，不过对于Gmail的用户，经过简单的设置可以直接让mailx命令通过Gmail收发邮件。</p>"
 ---
-<p>项目使用Amazon EC2作为服务器，在测试的时候发现邮件不能被正常发出去，网上查了下貌似Amazon的服务器为了防止被当作发垃圾邮件的工具，对邮件发送有限制。Amazon提供了一个Simple Mail Service可以与EC2集成在一起使用，不过对于Gmail的用户，经过简单的设置可以直接让mailx命令通过Gmail收发邮件。以下的教程基于<a href="http://klenwell.com/is/UbuntuCommandLineGmail" target="_blank">http://klenwell.com/is/UbuntuCommandLineGmail</a>.经过测试对邮件服务器托管在Google Apps的自有域名也同样适用。教程是基于Ubuntu写的，但经过简单修改应该同样适用于其他UNIX/Linux系统。</p>
+<p>以下的教程基于<a href="http://klenwell.com/is/UbuntuCommandLineGmail" target="_blank">http://klenwell.com/is/UbuntuCommandLineGmail</a>.经过测试对邮件服务器托管在Google Apps的自有域名也同样适用。教程是基于Ubuntu写的，但经过简单修改应该同样适用于其他UNIX/Linux系统。</p>
 <p>1. 安装程序包：</p>
 <pre class="brush: bash;fontsize: 100; first-line: 1; ">$ sudo apt-get install msmtp
 $ sudo apt-get install mailx</pre>

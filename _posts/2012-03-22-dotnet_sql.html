@@ -3,13 +3,13 @@ layout: post
 title: Issue when connecting ASP.NET project to SQL Server Compact 4.0
 categories:
 - 技术
-tags: []
+tags: [.NET]
 status: publish
 type: post
 published: true
 meta: {}
+description: "<p>在Review一个ASP.NET项目时，尝试将原来的SQL Server Express数据库转换到SQL Server Compact 4.0</p>"
 ---
-<p>在Review一个ASP.NET项目时，尝试将原来的SQL Server Express数据库转换到SQL Server Compact 4.0</p>
 <p>首先修改了web.config文件中的连接字符串：</p>
 <p>&lt;add name="LocalSqlServer"<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;connectionString="Data Source=C:\Documents\mydata.sdf;Password=mypwd;Persist Security Info=True"<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;providerName="System.Data.SqlServerCe.4.0"/&gt;</p>
 <p>可是页面总是返回错误信息：<span style="color: #ff0000;">"A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible."</span></p>
