@@ -3,7 +3,7 @@ layout: post
 title: "Demystifying iOS certificates and provisioning files"
 category: 技术
 tags: [iOS]
-description: "网上看到一篇blog, 对iOS程序发布过程中Certificate, App Identifier, Device UDID, Provisioning Profile等概念做了详细的解释，可以帮助不了解的人对iOS程序签名机制有一个比较清晰的理解。"
+description: "<p>网上看到一篇blog, 对iOS程序发布过程中Certificate, App Identifier, Device UDID, Provisioning Profile等概念做了详细的解释，可以帮助不了解的人对iOS程序签名机制有一个比较清晰的理解。</p>"
 ---
 {% include JB/setup %}
 
@@ -60,6 +60,3 @@ Enterprise deployment though, is a bit different. When you're a big company with
 Finally, there's App Store deployment. Like the enterprise deployment, there's no need to register devices in the provision file. The difference though, is that the signature in the provision file you get from Apple doesn't allow you to run anywhere! You won't be able to run the application build for the AppStore anywhere; the only thing you can do with it is submit it for the AppStore approval.
 
 When Apple receives your App, it's been already signed by you and contain the provision file, so they know you're really the correct person submitting the app, and that the App is the one that should be approved. After its reviewed, they finally re-sign the app with their own signature that can run on any phone.
-
---------
-Writing this post has actually helped me understand better the entire process, and I hope it help others as well. I hope everything here is correct, but if you see any problems please leave a message and I'll fix it!
