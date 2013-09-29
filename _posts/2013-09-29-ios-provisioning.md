@@ -3,7 +3,7 @@ layout: post
 title: "Demystifying iOS certificates and provisioning files"
 category: 技术
 tags: [iOS]
-description: "<p>网上看到一篇blog, 对iOS程序发布过程中Certificate, App Identifier, Device UDID, Provisioning Profile等概念做了详细的解释，可以帮助不了解的人对iOS程序签名机制有一个比较清晰的理解。</p>"
+description: "<p>转发一篇blog, 对iOS程序发布过程中Certificate, App Identifier, Device UDID, Provisioning Profile等概念和彼此关系做了详细的解释，可以帮助不了解的人对iOS程序签名机制有一个比较清晰的理解。</p>"
 ---
 {% include JB/setup %}
 
