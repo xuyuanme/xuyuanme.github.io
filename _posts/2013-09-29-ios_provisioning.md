@@ -1,9 +1,9 @@
----
+ï»¿---
 layout: post
 title: "Demystifying iOS certificates and provisioning files"
-category: ¼¼Êõ
+category: æŠ€æœ¯
 tags: [iOS]
-description: ÍøÉÏ¿´µ½Ò»Æªblog, ¶ÔiOS³ÌĞò·¢²¼¹ı³ÌÖĞCertificate, App Identifier, Device UDID, Provisioning ProfileµÈ¸ÅÄî×öÁËÏêÏ¸µÄ½âÊÍ£¬¿ÉÒÔ°ïÖú²»ÁË½âµÄÈË¶ÔiOS³ÌĞòÇ©Ãû»úÖÆÓĞÒ»¸ö±È½ÏÇåÎúµÄÀí½â¡£
+description: ç½‘ä¸Šçœ‹åˆ°ä¸€ç¯‡blog, å¯¹iOSç¨‹åºå‘å¸ƒè¿‡ç¨‹ä¸­Certificate, App Identifier, Device UDID, Provisioning Profileç­‰æ¦‚å¿µåšäº†è¯¦ç»†çš„è§£é‡Šï¼Œå¯ä»¥å¸®åŠ©ä¸äº†è§£çš„äººå¯¹iOSç¨‹åºç­¾åæœºåˆ¶æœ‰ä¸€ä¸ªæ¯”è¾ƒæ¸…æ™°çš„ç†è§£ã€‚
 ---
 {% include JB/setup %}
 
