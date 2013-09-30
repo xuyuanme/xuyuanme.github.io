@@ -71,7 +71,7 @@
         //Pc.init();
       {% else %}
 		  var i=1;
-  		$("h2").each(function(){$(this).attr("id",(i++)+"_"+$(this).text());});
+  		$("h2").each(function(){$(this).attr("id",(i++)+"_"+$(this).text().replace(/ /g,'_'));});
   		//$("h2").attr("id", function(){ return "h2_"(i++)+"_"+this.title });
           Toc.init('#sidebar', '#main');
         {% endif %}
