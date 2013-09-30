@@ -1,5 +1,5 @@
 ---
-customtype: post
+showsidebar: yes
 layout: post
 title: "理解iOS程序签名机制"
 category: 技术
