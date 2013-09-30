@@ -69,12 +69,19 @@
       {% if page.url == "/index.html" %}
         Tabs.init("#tab-list", "#tab-content-wrapper");
         //Pc.init();
-      {% else %}
-		  var i=1;
+      {% elsif page.showsidebar %}
+		var i=1;
   		$("h2").each(function(){$(this).attr("id",(i++)+"_"+$(this).text().replace(/ /g,"_"));});
   		//$("h2").attr("id", function(){ return "h2_"(i++)+"_"+this.title });
-          Toc.init('#sidebar', '#main');
-        {% endif %}
+        Toc.init('#sidebar', '#main');
+		$('#sidebar li a').click(function(event) {
+          event.preventDefault();
+          $($(this).attr('href'))[0].scrollIntoView();
+          window.location.hash = $(this).attr('href');
+		  scrollBy(0, -50);
+        });
+	  {% else %}
+      {% endif %}
   	  })
     </script>
     {% include JB/analytics %}
