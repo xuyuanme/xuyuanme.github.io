@@ -11,13 +11,18 @@ extra_js:
 ---
 
 示例：
-  <div ng-app="app" ng-controller="AlertController" class="well">
-    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
-    <button class='btn' ng-click="addAlert()">Add Alert</button>
-  </div>
+<div ng-app="app" ng-controller="AlertController" class="well">
+  <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
+  <button class='btn' ng-click="addAlert()">Add Alert</button>
+</div>
 
 html文件：
-{% gist 9034381 %}
+{% highlight html %}
+<div ng-app="app" ng-controller="AlertController" class="well">
+  <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
+  <button class='btn' ng-click="addAlert()">Add Alert</button>
+</div>
+{% endhighlight %}
 
 app.js文件：
 {% gist 9032546 %}
