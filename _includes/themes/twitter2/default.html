@@ -18,6 +18,12 @@
     <link href="{{ ASSET_PATH }}/css/syntax.css?body=1" rel="stylesheet" type="text/css" media="all">
     <link rel="shortcut icon" href="/assets/images/favicon.ico" />
 	<script src="/assets/function.js"></script>
+    {% for css_name in page.extra_css %}
+      <link rel="stylesheet" href="{{ css_name }}">
+    {% endfor %}
+    {% for js_name in page.extra_js %}
+      <script src="{{ js_name }}"></script>
+    {% endfor %}
   </head>
 
   <body>
