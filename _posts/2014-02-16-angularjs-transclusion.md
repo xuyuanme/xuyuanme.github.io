@@ -16,6 +16,9 @@ extra_js:
     <button class='btn' ng-click="addAlert()">Add Alert</button>
   </div>
 
+html文件：
+{% gist 9034381 %}
+
 app.js文件：
 {% gist 9032546 %}
 
