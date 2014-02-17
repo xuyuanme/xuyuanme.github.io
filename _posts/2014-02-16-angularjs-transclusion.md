@@ -1,22 +1,27 @@
 ---
 layout: post
-title: "AngularJS Directives: Using Transclusion"
+title: "AngularJS Directives: Using Transclusion Part1"
 category: 技术
 tags: [AngularJS]
-description: "<p>下面的例子展示了如何使用AngularJS directive中的transclude属性</p>"
+description: "<p>下面的例子展示了如何使用AngularJS directive中的transclude属性。使用transclude属性，可以将自定义指令元素中的内容以正确的作用域解析，然后再放回指令模板中标记的位置。</p>"
 extra_js:
  - /assets/angular/angular.min.js
  - /assets/posts/20140216/app.js
  - /assets/posts/20140216/directive.js
 ---
 
-示例：
+> directive中transclude的属性值可以设置为true或'element', 含义分别为：
+
+> - `transclude: true` transclude使用directive的子元素的内容，如以下例子所示
+> - `transclude: 'element'` transclude使用directive的整个元素内容，例如AngularJS的ng-repeat directive
+
+**示例：**
 <div ng-app="app" ng-controller="AlertController" class="well" ng-cloak>
   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
   <button class='btn' ng-click="addAlert()">Add Alert</button>
 </div>
 
-html文件：
+**html文件：**
 {% highlight html %}
 <div ng-app="app" ng-controller="AlertController" class="well" ng-cloak>
   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
@@ -24,7 +29,7 @@ html文件：
 </div>
 {% endhighlight %}
 
-app.js文件：
+**app.js文件：**
 {% highlight javascript %}
 angular.module('app', ['alert-directive'])
 
@@ -49,7 +54,7 @@ angular.module('app', ['alert-directive'])
     });
 {% endhighlight %}
 
-directive.js文件：
+**directive.js文件：**
 {% highlight javascript %}
 angular.module("alert-directive", [])
 
