@@ -11,14 +11,14 @@ extra_js:
 ---
 
 示例：
-<div ng-app="app" ng-controller="AlertController" class="well">
+<div ng-app="app" ng-controller="AlertController" class="well" ng-cloak>
   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
   <button class='btn' ng-click="addAlert()">Add Alert</button>
 </div>
 
 html文件：
 {% highlight html %}
-<div ng-app="app" ng-controller="AlertController" class="well">
+<div ng-app="app" ng-controller="AlertController" class="well" ng-cloak>
   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{[{alert.msg}]}</alert>
   <button class='btn' ng-click="addAlert()">Add Alert</button>
 </div>
