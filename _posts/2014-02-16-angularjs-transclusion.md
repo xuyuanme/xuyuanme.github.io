@@ -5,9 +5,9 @@ category: 技术
 tags: [AngularJS]
 description: "<p>下面的例子展示了如何使用AngularJS directive中的transclude属性</p>"
 extra_js:
- - /assets/angular/angular.js
- - https://rawgithub.com/xuyuanme/9032546/raw/adf27cde53b35b569294e27639863f9101fa6419/app.js
- - https://rawgithub.com/xuyuanme/9032862/raw/51f6b54455e91e930f44dd42fb060a09536df1f5/directive.js
+ - /assets/angular/angular.min.js
+ - /assets/posts/20140216/app.js
+ - /assets/posts/20140216/directive.js
 ---
 
 示例：
@@ -25,7 +25,47 @@ html文件：
 {% endhighlight %}
 
 app.js文件：
-{% gist 9032546 %}
+{% highlight javascript %}
+angular.module('app', ['alert-directive'])
+
+    .controller('AlertController', function ($scope) {
+        $scope.alerts = [
+            { type: 'error', msg: 'Oh snap! Something went wrong.' },
+            { type: 'success', msg: 'Well done! It worked out in the end.' }
+        ];
+
+        $scope.addAlert = function () {
+            $scope.alerts.push({msg: "Watch out - another alert!"});
+        };
+
+        $scope.closeAlert = function (index) {
+            $scope.alerts.splice(index, 1);
+        };
+    })
+
+    // this is used to avoid confliction when compile blog with Jekyll
+    .config(function ($interpolateProvider) {
+        $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+    });
+{% endhighlight %}
 
 directive.js文件：
-{% gist 9032862 %}
+{% highlight javascript %}
+angular.module("alert-directive", [])
+
+    .directive('alert', function () {
+        return {
+            restrict: 'EA', // support to be used as an element or an attribute
+            replace: true, // tells the compiler to replace the original directive's element with the template given by the template field
+            template: '<div class="alert alert-{{type || \'info\'}}">' +
+                '<button type="button" class="close" ng-click="close()">&times;</button>' +
+                '<div ng-transclude></div>' + // the ng-transclude directive gets the transcluded elements and appends them to the element in the template on which it appears
+                '</div>',
+            transclude: true, // tells the compiler to extract the contents of the original <alert> element and make them available to be transcluded into the template
+            scope: { // create an isolated scope
+                type: '=', // the = symbol indicates that AngularJS should keep the expression in the specified attribute and the value on the isolated scope in sync with each other
+                close: '&' // the & symbol indicates that the expression provided in the attribute on the element will be made available on the scope as a function
+            }
+        };
+    });
+{% endhighlight %}
