@@ -8,14 +8,14 @@ description: "<p>'Can't access Dropbox folder'问题的解决办法</p>"
 
 发现Ubuntu上的Dropbox不能正常同步了，检查显示Dropbox正在运行：
 
-{% highlight shell %}
+{% highlight sh %}
 # ~/.dropbox-dist/dropboxd
 Another instance of Dropbox (2622) is running!
 {% endhighlight %}
 
 但状态出现异常：
 
-{% highlight shell %}
+{% highlight sh %}
 # ~/Dropbox/Unix/scripts/dropbox.py status
 Can't monitor Dropbox folder (Click to fix)
 Can't access Dropbox folder
@@ -24,7 +24,7 @@ Syncing (39 files remaining)
 
 解决方法：http://askubuntu.com/questions/247461/how-do-i-fix-a-cant-access-dropbox-folder-error
 
-{% highlight shell %}
+{% highlight sh %}
 # sudo sysctl fs.inotify.max_user_instances=256
 fs.inotify.max_user_instances = 256
 # sudo sysctl fs.inotify.max_user_watches=1048576
