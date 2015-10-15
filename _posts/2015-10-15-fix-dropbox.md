@@ -3,7 +3,7 @@ layout: post
 title: "Ubuntu Dropbox无法同步问题"
 category: 技术
 tags: [Dropbox]
-description: "<p>"Can't access Dropbox folder"问题的解决办法</p>"
+description: "<p>'Can't access Dropbox folder'问题的解决办法</p>"
 ---
 
 发现Ubuntu上的Dropbox不能正常同步了，检查显示Dropbox正在运行：
