@@ -36,4 +36,4 @@ Dropbox daemon stopped.
 Starting Dropbox...Done!
 {% endhighlight %}
 
-(dropbox.py的说明见http://www.dropboxwiki.com/tips-and-tricks/using-the-official-dropbox-command-line-interface-cli)
+[dropbox.py的说明](http://www.dropboxwiki.com/tips-and-tricks/using-the-official-dropbox-command-line-interface-cli)
