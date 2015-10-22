@@ -22,18 +22,13 @@ Can't access Dropbox folder
 Syncing (39 files remaining)
 {% endhighlight %}
 
-解决方法：http://askubuntu.com/questions/247461/how-do-i-fix-a-cant-access-dropbox-folder-error
+[解决方法：](http://askubuntu.com/questions/247461/how-do-i-fix-a-cant-access-dropbox-folder-error)
+
+Put these in /etc/sysctl.conf:
 
 {% highlight sh %}
-# sudo sysctl fs.inotify.max_user_instances=256
-fs.inotify.max_user_instances = 256
-# sudo sysctl fs.inotify.max_user_watches=1048576
 fs.inotify.max_user_watches = 1048576
-
-# ~/Dropbox/Unix/scripts/dropbox.py stop
-Dropbox daemon stopped.
-# ~/Dropbox/Unix/scripts/dropbox.py start
-Starting Dropbox...Done!
+fs.inotify.max_user_instances = 256
 {% endhighlight %}
 
 [dropbox.py的说明](http://www.dropboxwiki.com/tips-and-tricks/using-the-official-dropbox-command-line-interface-cli)
