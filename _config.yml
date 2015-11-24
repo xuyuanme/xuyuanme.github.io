@@ -92,7 +92,7 @@ JB :
   analytics :
     provider : google
     google : 
-        tracking_id : 'UA-31075648-xx'
+        tracking_id : 'UA-17227854-1'
     getclicky :
       site_id : 
 

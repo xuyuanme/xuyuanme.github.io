@@ -12,7 +12,7 @@ clicky_site_ids.push(66527697);
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-31075648-xx']);
+  _gaq.push(['_setAccount', 'UA-17227854-1']);
   _gaq.push(['_setDomainName', 'blog.xuyuan.me']);
   _gaq.push(['_trackPageview']);
 
