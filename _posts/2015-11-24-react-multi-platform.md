@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "用Javascript拥抱2016: Node.js, React, React Native, Redux, and more"
+title: "［Github实例］使用React, React Native和Redux实现跨平台共用Web, iOS, Android的核心代码"
 category: 技术
 tags: [Javascript,React,React Native,Redux,Node.js]
 description: "<p>相信使用同一个平台和技术开发Web, iOS, Android是很多程序员的追求，也是很多创业公司和产品经理的梦想。而如果核心的业务逻辑代码能够跨平台共用，那更是梦寐以求的事情了。试想，创业公司不用再忍受Android/iOS应聘者的拒绝，只要招几个互为备份的Javascript开发就可以搞定跨平台开发；同一个业务Bug不再担心iOS改好了而Android还没fix，只要改一行JS代码就可以修正各平台；iOS App可以实现即时部署，再也不用在线上bug火烧眉毛的时候还得等待苹果漫长的审核期；如此种种，程序员和产品经理终于可以和谐相处了 :D</p>"
