@@ -19,7 +19,9 @@ description: "<p>相信使用同一个平台和技术开发Web, iOS, Android是�
 ## 技术栈
 
 - IDE: [Sublime Text 3](http://www.sublimetext.com/3)
+
   在尝试过Webstorm, Atom, VS Code之后，还是觉得Sublime Text最轻便灵活。在Javascript各种框架乱战的时代，似乎任何一个试图做到大而全的IDE都或多或少会有一些缺陷。相反Sublime Text的小巧以及丰富的插件使它能够应对各种要求。未来看好微软出品的VS Code，也许终有一天会出现类似Visual Studio或Xcode的Javascript事实标准IDE。
+  
 - 静态代码检查：[ESLint](http://eslint.org/) + [SublimeLinter](http://sublimelinter.com)
 - 服务端：[Node.js](https://nodejs.org/) + [Express](http://expressjs.com/)
 - Web端程序：[React](https://facebook.github.io/react/)
