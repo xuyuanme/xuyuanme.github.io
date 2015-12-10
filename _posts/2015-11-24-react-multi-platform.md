@@ -34,7 +34,7 @@ description: "<p>相信使用同一个平台和技术开发Web, iOS, Android是�
 
 ## 运行界面
 
-![ReactTwitter Screen](http://xuyuan.me/img/react-twitter-screen.jpg)
+![ReactTwitter Screen](http://xuyuan.me/img/react-twitter-screen.gif)
 
 [NodeTwitter](https://github.com/xuyuanme/NodeTwitter)和[ReactTwitter](https://github.com/xuyuanme/ReactTwitter)的例子可以在Github上找到，包括了Web, iOS和Android平台。
 
