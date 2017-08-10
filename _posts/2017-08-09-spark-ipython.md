@@ -53,7 +53,7 @@ Update system environment variables in "Advanced system settings" --> "Environme
 
 Append following string to your "Path" variable:
 
-- `；C:\Java\jdk1.8.0_121\bin;C:\Spark\spark-2.2.0-bin-hadoop2.7\bin;C:\Anaconda2;C:\Anaconda2\Scripts`
+- `;C:\Java\jdk1.8.0_121\bin;C:\Spark\spark-2.2.0-bin-hadoop2.7\bin;C:\Anaconda2;C:\Anaconda2\Scripts`
 
 ### 6. Launch PySpark shell and test
 
